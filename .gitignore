@@ -56,3 +56,5 @@ Flash
 RAM
 Listings
 Objects
+*.uvguix*
+*.uvoptx

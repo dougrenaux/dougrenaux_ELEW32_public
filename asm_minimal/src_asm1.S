@@ -81,7 +81,7 @@ __Vectors_Size  EQU     __Vectors_End - __Vectors
 ;      CODE
 ;
 ;------------------------------------------------------------------------------
-                AREA    |.text|, CODE, READONLY
+                AREA    ||.text||, CODE, READONLY
                 ENTRY
                 ;IMPORT  _main
                 EXPORT  __main           
@@ -92,6 +92,7 @@ __Vectors_Size  EQU     __Vectors_End - __Vectors
 ;------------------------------------------------------------------------------
 __main   		PROC
                 LDR     R0, =0x5000
+				NOP
                 
                 LDR     R3,=var_a
                 LDR     R4,[R3]
@@ -111,4 +112,5 @@ Default_Handler PROC
                 B       .
                 ENDP
 
+				ALIGN
                 END

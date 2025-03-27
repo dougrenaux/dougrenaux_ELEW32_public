@@ -28,14 +28,8 @@
  *      File includes
  *
  *------------------------------------------------------------------------------*/
-//#include <stdbool.h>
-//#include <stdint.h>
-//#include <stdio.h>
-//#include "driverlib/sysctl.h"
-
 #include <stdio.h>
 #include "TM4C129.h"                    // Device header
-//#include "Serial.h"
 #include "LED.h"
 #include "BTN.h"
 
@@ -57,10 +51,6 @@ volatile uint32_t msTicks;                      /* counts 1ms timeTicks       */
  *      Functions
  *
  *------------------------------------------------------------------------------*/
-
-
-
-
 
 /*----------------------------------------------------------------------------
   SysTick_Handler
@@ -87,9 +77,11 @@ void Delay (uint32_t dlyTicks) {
  * @brief - simple demo presenting a text on LCD
  */
 
+
 int main (void) {
   int32_t idx  = -1, dir = 1;
- uint32_t btns = 0;
+  uint32_t btns = 0;  
+
 
   SystemCoreClockUpdate();                      /* Get Core Clock Frequency   */
 
@@ -117,7 +109,5 @@ int main (void) {
       Delay(200);                               /* Delay 200ms                */
       LED_Out (0x00);
     }
-
   }
-
 }

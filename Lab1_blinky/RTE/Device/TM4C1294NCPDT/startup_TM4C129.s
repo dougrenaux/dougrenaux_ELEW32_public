@@ -1021,13 +1021,13 @@ GPIOT_Handler\
 
 ; User Initial Stack & Heap
 
-                IF      :DEF:__MICROLIB
+                #ifdef __MICROLIB
 
                 EXPORT  __initial_sp
                 EXPORT  __heap_base
                 EXPORT  __heap_limit
 
-                ELSE
+                #else
 
                 IMPORT  __use_two_region_memory
                 EXPORT  __user_initial_stackheap
@@ -1041,7 +1041,7 @@ __user_initial_stackheap
 
                 ALIGN
 
-                ENDIF
+                #endif
 
 
                 END

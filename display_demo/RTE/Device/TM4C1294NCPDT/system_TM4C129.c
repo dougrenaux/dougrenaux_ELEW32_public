@@ -1,3 +1,8 @@
+// Original file in Keil\TM4C_DFP\1.1.0\Device\Source
+// Modified for configuration purposes.
+// Changes: initial SYSTEM_CLOCK is 25 MHz
+// By: Douglas Renaux - Oct 2023
+
 /**************************************************************************//**
  * @file     system_TM4C129.c
  * @brief    CMSIS Device System Source File for
@@ -16,7 +21,7 @@
 /*----------------------------------------------------------------------------
   Define clocks
  *----------------------------------------------------------------------------*/
-#define __SYSTEM_CLOCK    (16000000ul)
+#define __SYSTEM_CLOCK    (25000000ul)
 
 
 /*----------------------------------------------------------------------------

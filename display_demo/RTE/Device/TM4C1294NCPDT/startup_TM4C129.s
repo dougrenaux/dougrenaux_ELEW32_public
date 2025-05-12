@@ -1,3 +1,10 @@
+
+;// Original file in Keil\TM4C_DFP\1.1.0\Device\Source\ARM
+;// Modified for compatibility between ThreadX init and TivaWare init
+;// Changes: STACK, HEAP, exception_vector, handlers, 
+;// By: Douglas Renaux - Apr 2025
+
+
 ;/**************************************************************************//**
 ; * @file     startup_TM4C129.s
 ; * @brief    CMSIS Cortex-M4 Core Device Startup File for
@@ -25,6 +32,24 @@
 ;//-------- <<< Use Configuration Wizard in Context Menu >>> ------------------
 ;*/
 
+;DR changes: got these from tx_initialize_low_level.s
+; IMPORT  _tx_thread_system_stack_ptr
+; IMPORT  _tx_initialize_unused_memory
+; IMPORT  _tx_thread_context_save
+; IMPORT  _tx_thread_context_restore
+; IMPORT  _tx_timer_interrupt
+    IMPORT  __main
+;    IMPORT  |Image$$RO$$Limit|
+;    IMPORT  |Image$$RW$$Base|
+;    IMPORT  |Image$$ZI$$Base|
+;    IMPORT  |Image$$ZI$$Limit|
+; IMPORT  __tx_PendSVHandler
+; IMPORT  __tx_SysTickHandler
+
+	EXPORT  StackMem
+	EXPORT  HeapMem
+
+
 
 ; <h> Stack Configuration
 ;   <o> Stack Size (in Bytes) <0x0-0xFFFFFFFF:8>
@@ -33,6 +58,8 @@
 Stack_Size      EQU     0x00000200
 
                 AREA    STACK, NOINIT, READWRITE, ALIGN=3
+;DR changes: StackMem (alias)
+StackMem				
 Stack_Mem       SPACE   Stack_Size
 __initial_sp
 
@@ -44,10 +71,11 @@ __initial_sp
 Heap_Size       EQU     0x00000000
 
                 AREA    HEAP, NOINIT, READWRITE, ALIGN=3
+;DR changes: HeapMem (alias)
+HeapMem
 __heap_base
 Heap_Mem        SPACE   Heap_Size
 __heap_limit
-
 
                 PRESERVE8
                 THUMB
@@ -59,7 +87,10 @@ __heap_limit
                 EXPORT  __Vectors
                 EXPORT  __Vectors_End
                 EXPORT  __Vectors_Size
+				EXPORT  __tx_vectors
 
+;DR changes: __tx_vectors (alias); changes in vector: __tx_PendSVHandler, __tx_SysTickHandler
+__tx_vectors
 __Vectors       DCD     __initial_sp              ; Top of Stack
                 DCD     Reset_Handler             ; Reset Handler
                 DCD     NMI_Handler               ; NMI Handler
@@ -74,8 +105,8 @@ __Vectors       DCD     __initial_sp              ; Top of Stack
                 DCD     SVC_Handler               ; SVCall Handler
                 DCD     DebugMon_Handler          ; Debug Monitor Handler
                 DCD     0                         ; Reserved
-                DCD     PendSV_Handler            ; PendSV Handler
-                DCD     SysTick_Handler           ; SysTick Handler
+                DCD     PendSV_Handler	;__tx_PendSVHandler        ; PendSV Handler
+                DCD     SysTick_Handler	;__tx_SysTickHandler       ; SysTick Handler
 
                 ; External Interrupts
 
@@ -990,13 +1021,13 @@ GPIOT_Handler\
 
 ; User Initial Stack & Heap
 
-                IF      :DEF:__MICROLIB
+                #ifdef __MICROLIB
 
                 EXPORT  __initial_sp
                 EXPORT  __heap_base
                 EXPORT  __heap_limit
 
-                ELSE
+                #else
 
                 IMPORT  __use_two_region_memory
                 EXPORT  __user_initial_stackheap
@@ -1010,7 +1041,7 @@ __user_initial_stackheap
 
                 ALIGN
 
-                ENDIF
+                #endif
 
 
                 END
